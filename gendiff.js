@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import parseFile from './parse.js';
+import parseFileJson from './modules/json/parseJson.js';
+import comparisonFlatFiles from './modules/json/comparisonFlatFiles.js';
+import path from 'path';
 
 const program = new Command();
 
@@ -11,10 +13,23 @@ program
   .option('-f, --format [type]', 'output format')
   .option('-h, --help', 'output usage information')
   .action((filepath1, filepath2) => {
-    const data1 = parseFile(filepath1);
-    const data2 = parseFile(filepath2);
-    console.log('Data from file 1:', data1);
-    console.log('Data from file 2:', data2);
+    const relativePath1 = filepath1;
+    const relativePath2 = filepath2;
+
+    const absolutePath1 = path.resolve(process.cwd(), relativePath1);
+    const absolutePath2 = path.resolve(process.cwd(), relativePath2);
+
+    const fileExtension1 = path.extname(absolutePath1).toLocaleLowerCase();
+    const fileExtension2 = path.extname(absolutePath2).toLocaleLowerCase();
+
+    if (fileExtension1 === fileExtension2 && fileExtension1 === '.json') {
+      const data1 = parseFileJson(absolutePath1)
+      const data2 = parseFileJson(absolutePath2)
+      const result = comparisonFlatFiles(data1, data2);
+      console.log(result);
+    } else {
+      throw new Error('Files have different extensions');
+    }
   })
   
   
