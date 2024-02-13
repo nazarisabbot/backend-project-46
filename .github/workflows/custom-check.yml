@@ -15,7 +15,7 @@ jobs:
       - run: make lint
       - run: make test
       - name: Install cc-test-reporter
-        run: npm install -g cc-test-reporter
+        run: npm install -g @codeclimate/test-reporter
       - name: Format coverage and upload to Code Climate
         run: |
           cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
