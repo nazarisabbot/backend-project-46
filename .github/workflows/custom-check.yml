@@ -14,11 +14,13 @@ jobs:
       - run: make install
       - run: make lint
       - run: make test
-      - name: Install cc-test-reporter
-        run: npm install -g @codeclimate/test-reporter
-      - name: Format coverage and upload to Code Climate
-        run: |
-          cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
-          cc-test-reporter upload-coverage
+      - name: Test & publish code coverage
+      # Publish code coverage on Code Climate
+      # https://github.com/paambaati/codeclimate-action
+        uses: paambaati/codeclimate-action@v5.0.0
+        # Add Code Climate secret key
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: make test-coverage
+          debug: true
