@@ -1,17 +1,37 @@
-import _ from 'lodash';
+import fs from 'fs';
 
-const comparisonFlatFiles = (obj1, obj2) => {
+const parseFileJson = (filePath) => {
+  try {
+    const data = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      throw new Error(`File not found: ${filePath}`);
+    } else {
+      throw error;
+    }
+  }
+};
+
+const comparisonFlatFiles = (path1, path2) => {
+  const obj1 = parseFileJson(path1);
+  const obj2 = parseFileJson(path2);
+
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
+
+  if (keys1.length === 0 && keys2.length === 0) {
+    return 'Both files are empty';
+  }
 
   const uniqueKeys = new Set([...keys1, ...keys2]);
 
   const differences = {};
 
   uniqueKeys.forEach((key) => {
-    if(obj1[key] === obj2[key]) {
+    if (obj1[key] === obj2[key]) {
       differences[`  ${key}`] = obj1[key];
-    } else if(obj1[key] !== undefined && obj2[key] !== undefined) {
+    } else if (obj1[key] !== undefined && obj2[key] !== undefined) {
       differences[`- ${key}`] = obj1[key];
       differences[`+ ${key}`] = obj2[key];
     } else if (obj1[key] !== undefined) {
@@ -27,14 +47,12 @@ const comparisonFlatFiles = (obj1, obj2) => {
     return aFirstChar.localeCompare(bFirstChar);
   });
 
-
   const result = sortedKeys.map((key) => {
     const value = differences[key];
     return `${key}: ${value}`;
   }).join('\n');
 
   return result;
-  
 };
 
 export default comparisonFlatFiles;

@@ -1,0 +1,24 @@
+name: BACKEND-PROJECT-46
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+      - run: make install
+      - run: make lint
+      - run: make test
+      - name: Install cc-test-reporter
+        run: npm install -g cc-test-reporter
+      - name: Format coverage and upload to Code Climate
+        run: |
+          cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
+          cc-test-reporter upload-coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
