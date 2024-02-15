@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import path from 'path';
-import comparisonFlatFiles from './json/comparisonFlatFiles.js';
+import comparisonFlatFiles from './comparisonFlatFiles.js';
 
 const program = new Command();
 program
@@ -19,10 +19,13 @@ program
     const fileExtension2 = path.extname(absolutePath2).toLocaleLowerCase();
 
     if (fileExtension1 === fileExtension2 && fileExtension1 === '.json') {
-      const result = comparisonFlatFiles(absolutePath1, absolutePath2);
+      const result = comparisonFlatFiles(absolutePath1, absolutePath2, 'json');
       console.log(result);
-    } else {
-      throw new Error('Files have different extensions');
+    }
+
+    if (fileExtension1 === fileExtension2 && fileExtension1 === '.yml') {
+      const result = comparisonFlatFiles(absolutePath1, absolutePath2, 'yml');
+      console.log(result);
     }
   })
   .option('-f, --format [type]', 'output format');

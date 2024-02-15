@@ -1,21 +1,9 @@
-import fs from 'fs';
+import parseFileJson from './parserJson.js';
+import parseFileYml from './parserYml.js';
 
-const parseFileJson = (filePath) => {
-  try {
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      throw new Error(`File not found: ${filePath}`);
-    } else {
-      throw error;
-    }
-  }
-};
-
-const comparisonFlatFiles = (path1, path2) => {
-  const obj1 = parseFileJson(path1);
-  const obj2 = parseFileJson(path2);
+const comparisonFlatFiles = (path1, path2, extension = 'json') => {
+  const obj1 = extension === 'json' ? parseFileJson(path1) : parseFileYml(path1);
+  const obj2 = extension === 'json' ? parseFileJson(path2) : parseFileYml(path2);
 
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);

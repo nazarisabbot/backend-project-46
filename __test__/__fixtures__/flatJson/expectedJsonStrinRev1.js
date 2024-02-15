@@ -1,4 +1,4 @@
-const expectedOutput = `
+const expectedOutputRev1 = `
 - follow: false
   host: hexlet.io
 - proxy: 123.234.53.22
@@ -6,4 +6,4 @@ const expectedOutput = `
 + timeout: 20
 + verbose: true`;
 
-export default expectedOutput;
+export default expectedOutputRev1;
