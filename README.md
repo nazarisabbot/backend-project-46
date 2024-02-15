@@ -3,6 +3,8 @@
 
 [![BACKEND-PROJECT-46](https://github.com/nazarisabbot/backend-project-46/actions/workflows/custom-check.yml/badge.svg)](https://github.com/nazarisabbot/backend-project-46/actions/workflows/custom-check.yml)
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/7cd1ff445ff167bf7f6b/maintainability)](https://codeclimate.com/github/nazarisabbot/backend-project-46/maintainability)
+
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7cd1ff445ff167bf7f6b/test_coverage)](https://codeclimate.com/github/nazarisabbot/backend-project-46/test_coverage)
 
 [![asciicast](https://asciinema.org/a/JxdWXcr6pTa91Zu4lBpQS1W0T.svg)](  https://asciinema.org/a/JxdWXcr6pTa91Zu4lBpQS1W0T)
