@@ -4,7 +4,7 @@ import expectedOutputRev1 from './__fixtures__/flatJson/expectedJsonStringRev1.j
 import expectedOutputRev2 from './__fixtures__/flatJson/expectedJsonStringRev2.js';
 
 const file1path = getFixturePath('flatJson', 'file1.json');
-const file2path = getFixturePath('flatJson', 'file2.json')
+const file2path = getFixturePath('flatJson', 'file2.json');
 
 const file3path = getFixturePath('flatJson', 'file3.json');
 const file4path = getFixturePath('flatJson', 'file4.json');
