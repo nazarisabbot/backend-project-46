@@ -1,9 +1,8 @@
-import parseFileJson from './parserJson.js';
-import parseFileYml from './parserYml.js';
+import parseFile from './parsers/parser.js';
 
-const comparisonFlatFiles = (path1, path2, extension = 'json') => {
-  const obj1 = extension === 'json' ? parseFileJson(path1) : parseFileYml(path1);
-  const obj2 = extension === 'json' ? parseFileJson(path2) : parseFileYml(path2);
+const comparisonFlatFiles = (path1, path2) => {
+  const obj1 = parseFile(path1);
+  const obj2 = parseFile(path2);
 
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
