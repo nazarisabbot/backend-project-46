@@ -1,9 +1,9 @@
-import getAbsolutePath from './getAbsolutePath.js';
+import getAbsolutePathAndExtname from './getAbsolutePathAndExtname.js';
 import parseFileJson from './parserJson.js';
 import parseFileYml from './parserYml.js';
 
 const parseFile = (pathFile) => {
-  const { path, extension } = getAbsolutePath(pathFile);
+  const { path, extension } = getAbsolutePathAndExtname(pathFile);
 
   if (extension === '.json') {
     return parseFileJson(path);
