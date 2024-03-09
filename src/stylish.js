@@ -9,17 +9,13 @@ const stylish = (data) => {
         return alphaSort;
       }
 
-      // Берем подстроки после первой группы букв
       const postfixA = a.replace(/^\W*\w+/, '');
       const postfixB = b.replace(/^\W*\w+/, '');
 
-      // Если подстроки начинаются с цифр
       if (/^\d/.test(postfixA) && /^\d/.test(postfixB)) {
-        // Сравниваем цифры
         return Number(postfixA) - Number(postfixB);
       }
 
-      // Если подстроки не начинаются с цифр, используем стандартную алфавитную сортировку
       return a.localeCompare(b);
     });
 
