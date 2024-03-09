@@ -1,30 +1,46 @@
 const stylish = (data) => {
   const createLayout = (obj, depth) => {
-    let resultString = '';
-
-    const generateLineValue = (nameKey, target, level) => {
-      const indent = '.'.repeat(level);
-      return `${indent}${nameKey}: ${target}\n`;
-    };
-
+    let result = '';
     const keys = Object.keys(obj);
 
-    keys.forEach((key) => {
-      const value = obj[key];
-      // const indent = key[0] === '-' || key[0] === '+' ? 2 : 4;
-      if (typeof value === 'object' && value !== null) {
-        resultString += `${'*'.repeat((depth + 1) * 4).substring(0, 2)}${key}: {\n`;
-        resultString += createLayout(value, depth + 1 * 4);
-        resultString += `${' '.repeat(depth + 1 * 4)}}\n`;
-      } else {
-        resultString += `${generateLineValue(key, value, depth + 1 * 2)}`;
+    const sortedKeys = keys.sort((a, b) => {
+      const alphaSort = a.replace(/^\W+/, '').localeCompare(b.replace(/^\W+/, ''));
+      if (alphaSort !== 0) {
+        return alphaSort;
       }
+
+      // Берем подстроки после первой группы букв
+      const postfixA = a.replace(/^\W*\w+/, '');
+      const postfixB = b.replace(/^\W*\w+/, '');
+
+      // Если подстроки начинаются с цифр
+      if (/^\d/.test(postfixA) && /^\d/.test(postfixB)) {
+        // Сравниваем цифры
+        return Number(postfixA) - Number(postfixB);
+      }
+
+      // Если подстроки не начинаются с цифр, используем стандартную алфавитную сортировку
+      return a.localeCompare(b);
     });
 
-    return resultString;
+    sortedKeys.forEach((key) => {
+      const value = obj[key];
+
+      if (typeof value === 'object' && value !== null) {
+        const indent = key[0] === '-' || key[0] === '+' ? 2 : 0;
+        result += `${' '.repeat((depth + 1) * 4)}${key.trim()}: {\n`.slice(indent);
+        result += createLayout(value, depth + 1);
+        result += `${' '.repeat((depth + 1) * 4)}}\n`;
+      } else if (key[0] === '-' || key[0] === '+') {
+        result += `${' '.repeat((depth + 1) * 4)}${key}: ${value}\n`.substring(2);
+      } else {
+        result += `${' '.repeat((depth + 1) * 4)}${key.trim()}: ${value}\n`;
+      }
+    });
+    return result;
   };
 
-  return `{\n${createLayout(data, 0)}\n}`;
+  return `{\n${createLayout(data, 0)}}`;
 };
 
 export default stylish;
