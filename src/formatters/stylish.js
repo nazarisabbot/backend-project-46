@@ -1,7 +1,7 @@
 import sortedKeys from './sortedKeys.js';
 
 const stylish = (data) => {
-  const createLayout = (obj, depth) => {
+  const createLayOut = (obj, depth) => {
     let result = '';
     const keys = sortedKeys(Object.keys(obj));
 
@@ -12,7 +12,7 @@ const stylish = (data) => {
       switch (true) {
         case (typeof value === 'object' && value !== null):
           result += `${' '.repeat((depth + 1) * 4)}${key.trim()}: {\n`.slice(leftIndent);
-          result += createLayout(value, depth + 1);
+          result += createLayOut(value, depth + 1);
           result += `${' '.repeat((depth + 1) * 4)}}\n`;
           break;
         case (leftIndent > 0):
@@ -25,7 +25,7 @@ const stylish = (data) => {
     return result;
   };
 
-  return `{\n${createLayout(data, 0)}}`;
+  return `{\n${createLayOut(data, 0)}}`;
 };
 
 export default stylish;
