@@ -1,4 +1,3 @@
-// index.js
 import stylishFormatter from './stylish.js';
 import plainFormatter from './plain.js';
 import formatToJson from './json.js';
@@ -9,8 +8,8 @@ export default (diff, format) => {
       return formatToJson(diff);
     case 'plain':
       return plainFormatter(diff);
-    case 'stylish':
     default:
+      console.error(`Unknown format: ${format}. Using the default formatter.`);
       return stylishFormatter(diff);
   }
 };
