@@ -3,9 +3,11 @@ import parseFile from '../src/parsers/parser.js';
 import comparisonFlatFiles from '../src/comparisonFiles.js';
 import stylish from '../src/formatters/stylish.js';
 import plain from '../src/formatters/plain.js';
+import formatToJson from '../src/formatters/json.js';
 import expectedStringFormatStylish from './__fixtures__/filesJson/expectedStringFormatStylish.js';
 import expectedStringFormatPlain from './__fixtures__/filesJson/expectedStringFormatPlain.js';
 import expectedYmlString from './__fixtures__/filesYml/expectedYmlString.js';
+import expectedStringFormatJson from './__fixtures__/filesJson/expectedStringFormatJson.js';
 import obj from './__fixtures__/filesJson/obj.js';
 
 const firstJsonFile = getFixturePath('filesJson', 'file1.json');
@@ -38,4 +40,9 @@ test('formatter plain', () => {
   const diffObj = comparisonFlatFiles(firstJsonFile, secondJsonFile);
   expect(plain(diffObj)
     .trim()).toBe(expectedStringFormatPlain.trim());
+});
+
+test('formatter json', () => {
+  const diffObj = comparisonFlatFiles(firstJsonFile, secondJsonFile);
+  expect(formatToJson(diffObj)).toBe(expectedStringFormatJson.trim());
 });
