@@ -4,9 +4,9 @@
   "description": "Compares two configuration files and shows a difference.",
   "type": "module",
   "bin": {
-    "gendiff": "./src/gendiff.js"
+    "gendiff": "./bin/gendiff.js"
   },
-  "main": "./src/gendiff.js",
+  "main": "./bin/gendiff.js",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",

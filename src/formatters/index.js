@@ -8,8 +8,8 @@ export default (diff, format) => {
       return formatToJson(diff);
     case 'plain':
       return plainFormatter(diff);
+    case 'stylish':
     default:
-      console.error(`Unknown format: ${format}. Using the default formatter.`);
       return stylishFormatter(diff);
   }
 };

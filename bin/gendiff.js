@@ -1,6 +1,8 @@
+#!/usr/bin/env node
+
 import { Command } from 'commander';
-import comparisonFiles from './comparisonFiles.js';
-import formatter from './formatters/index.js';
+import comparisonFiles from '../src/comparisonFiles.js';
+import formatter from '../src/formatters/index.js';
 
 const program = new Command();
 program
