@@ -1,4 +1,4 @@
-const expectedJsonString = `
+const expectedStringFormatStylish = `
 {
     common: {
       + follow: false
@@ -44,4 +44,4 @@ const expectedJsonString = `
     }
 }`;
 
-export default expectedJsonString;
+export default expectedStringFormatStylish;

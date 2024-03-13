@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import comparisonFiles from './comparisonFiles.js';
-import stylish from './stylish.js';
+import formatter from './formatters/index.js';
 
 const program = new Command();
 program
@@ -15,9 +15,9 @@ program
 
     const result = comparisonFiles(filePath1, filePath2);
 
-    if (options.format === 'stylish') {
-      console.log(stylish(result));
-    }
+    const { format } = options;
+    const formattedDiff = formatter(result, format);
+    console.log(formattedDiff);
   })
   .option('-f, --format [type]', 'output format', 'stylish');
 

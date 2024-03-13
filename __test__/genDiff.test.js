@@ -1,8 +1,10 @@
 import getFixturePath from './getFixturePath.js';
 import parseFile from '../src/parsers/parser.js';
 import comparisonFlatFiles from '../src/comparisonFiles.js';
-import stylish from '../src/stylish.js';
-import expectedJsonString from './__fixtures__/filesJson/expectedJsonString.js';
+import stylish from '../src/formatters/stylish.js';
+import plain from '../src/formatters/plain.js';
+import expectedStringFormatStylish from './__fixtures__/filesJson/expectedStringFormatStylish.js';
+import expectedStringFormatPlain from './__fixtures__/filesJson/expectedStringFormatPlain.js';
 import expectedYmlString from './__fixtures__/filesYml/expectedYmlString.js';
 import obj from './__fixtures__/filesJson/obj.js';
 
@@ -23,11 +25,17 @@ test('parse YML', () => {
 test('different json files', () => {
   const diffObj = comparisonFlatFiles(firstJsonFile, secondJsonFile);
   expect(stylish(diffObj)
-    .trim()).toBe(expectedJsonString.trim());
+    .trim()).toBe(expectedStringFormatStylish.trim());
 });
 
 test('different yml files', () => {
   const diffObj = comparisonFlatFiles(firstYmlFile, secondYmlFile);
   expect(stylish(diffObj)
     .trim()).toBe(expectedYmlString.trim());
+});
+
+test('formatter plain', () => {
+  const diffObj = comparisonFlatFiles(firstJsonFile, secondJsonFile);
+  expect(plain(diffObj)
+    .trim()).toBe(expectedStringFormatPlain.trim());
 });
