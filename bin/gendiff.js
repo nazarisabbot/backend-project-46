@@ -8,7 +8,8 @@ program
   .description('Compares two configuration files and shows a difference.')
   .arguments('<filepath1> <filepath2>')
   .action((filePath1, filePath2, options) => {
-    const strDiff = runComparisonFiles(filePath1, filePath2, options);
+    const { format } = options;
+    const strDiff = runComparisonFiles(filePath1, filePath2, format);
     console.log(strDiff);
   })
   .option('-f, --format [type]', 'output format', 'stylish');
