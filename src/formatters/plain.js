@@ -16,6 +16,8 @@ const stringifyValue = (value) => {
   return value;
 };
 
+const prepareUpdatedResult = (result, str) => result.concat([str]).filter((s) => s.trim() !== '');
+
 const plain = (data, parentKey = '') => {
   const arrSortedKeys = sortedKeys(Object.keys(data));
 
@@ -27,45 +29,41 @@ const plain = (data, parentKey = '') => {
     const prevValue = data[prevKey];
     const fullKey = parentKey ? `${trimsPrefixKey(parentKey)}.${trimsPrefixKey(key)}` : trimsPrefixKey(key);
 
-    let updatedResult = result;
-
     if (isComplexValue(value) && value !== null) {
       if (key.startsWith('+')) {
         if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-          updatedResult = [...result, `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`];
+          const str = `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`;
+          return prepareUpdatedResult(result, str);
         } else {
-          updatedResult = [...result, `Property '${fullKey}' was added with value: [complex value]`];
+          const str = `Property '${fullKey}' was added with value: [complex value]`;
+          return prepareUpdatedResult(result, str);
         }
       }
-      if (key.startsWith('-')) {
-        if (nextKey && key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')) {
-          // Пропускаем данное действие
-        } else {
-          updatedResult = [...result, `Property '${fullKey}' was removed`];
-        }
+      if (key.startsWith('-') && (!nextKey || !(key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')))) {
+        const str = `Property '${fullKey}' was removed`;
+        return prepareUpdatedResult(result, str);
       }
       const nestedResult = plain(value, fullKey);
       if (nestedResult) {
-        updatedResult = [...result, nestedResult];
+        return prepareUpdatedResult(result, nestedResult);
       }
     } else {
       if (key.startsWith('+')) {
         if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-          updatedResult = [...result, `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`];
+          const str = `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`;
+          return prepareUpdatedResult(result, str);
         } else {
-          updatedResult = [...result, `Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`];
+          const str = `Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`;
+          return prepareUpdatedResult(result, str);
         }
       }
-      if (key.startsWith('-')) {
-        if (nextKey && key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')) {
-          // Пропускаем данное действие
-        } else {
-          updatedResult = [...result, `Property '${fullKey}' was removed`];
-        }
+      if (key.startsWith('-') && (!nextKey || !(key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')))) {
+        const str = `Property '${fullKey}' was removed`;
+        return prepareUpdatedResult(result, str);
       }
     }
 
-    return updatedResult.filter((str) => str.trim() !== ''); // Фильтруем пустые строки
+    return result;
   }, []).join('\n');
 };
 
