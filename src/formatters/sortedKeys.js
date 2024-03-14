@@ -1,6 +1,5 @@
 export default (keys) => {
-  const newSortedKeys = [...keys];
-  return newSortedKeys.sort((a, b) => {
+  const newSortedKeys = [...keys].slice().sort((a, b) => {
     const alphaSort = a.replace(/^\W+/, '').localeCompare(b.replace(/^\W+/, ''));
     if (alphaSort !== 0) {
       return alphaSort;
@@ -15,4 +14,6 @@ export default (keys) => {
 
     return a.localeCompare(b);
   });
+
+  return newSortedKeys;
 };
