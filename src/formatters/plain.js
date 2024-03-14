@@ -19,7 +19,7 @@ const stringifyValue = (value) => {
 const plain = (data, parentKey = '') => {
   const arrSortedKeys = sortedKeys(Object.keys(data));
 
-  return arrSortedKeys.reduce((result, key, index) => {
+  const resultArray = arrSortedKeys.flatMap((key, index) => {
     const nextKey = arrSortedKeys[index + 1];
     const prevKey = arrSortedKeys[index - 1];
 
@@ -27,38 +27,40 @@ const plain = (data, parentKey = '') => {
     const prevValue = data[prevKey];
     const fullKey = parentKey ? `${trimsPrefixKey(parentKey)}.${trimsPrefixKey(key)}` : trimsPrefixKey(key);
 
-    let updatedResult = [...result];
+    let processedArray = [];
 
     if (isComplexValue(value) && value !== null) {
       if (key.startsWith('+')) {
         if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-          updatedResult = [...result, `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`];
+          processedArray = [...processedArray, `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`];
         } else if (!nextKey || key.slice(2) !== nextKey.slice(2) || !nextKey.startsWith('+')) {
-          updatedResult = [...result, `Property '${fullKey}' was added with value: [complex value]`];
+          processedArray = [...processedArray, `Property '${fullKey}' was added with value: [complex value]`];
         }
       }
       if (key.startsWith('-') && (!nextKey || key.slice(2) !== nextKey.slice(2) || !nextKey.startsWith('+'))) {
-        updatedResult = [...result, `Property '${fullKey}' was removed`];
+        processedArray = [...processedArray, `Property '${fullKey}' was removed`];
       }
       const nestedResult = plain(value, fullKey);
       if (nestedResult) {
-        updatedResult = [...result, nestedResult];
+        processedArray = [...processedArray, nestedResult];
       }
     } else {
       if (key.startsWith('+')) {
         if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-          updatedResult = [...result, `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`];
+          processedArray = [...processedArray, `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`];
         } else if (!nextKey || key.slice(2) !== nextKey.slice(2) || !nextKey.startsWith('+')) {
-          updatedResult = [...result, `Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`];
+          processedArray = [...processedArray, `Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`];
         }
       }
       if (key.startsWith('-') && (!nextKey || key.slice(2) !== nextKey.slice(2) || !nextKey.startsWith('+'))) {
-        updatedResult = [...result, `Property '${fullKey}' was removed`];
+        processedArray = [...processedArray, `Property '${fullKey}' was removed`];
       }
     }
 
-    return updatedResult.filter((str) => str.trim() !== '');
-  }, []).join('\n');
+    return processedArray.filter((str) => str.trim() !== '');
+  });
+
+  return resultArray.join('\n');
 };
 
 export default plain;
