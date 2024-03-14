@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import runComparisonFiles from '../index.js';
+import runComparisonFiles from '../src/index.js';
 
 const [,, filePath1, filePath2] = process.argv;
 
