@@ -6,27 +6,25 @@ const comparisonFiles = (path1, path2) => {
 
   const createsDiffObject = (firstData, secondData) => {
     const uniqueKeys = [...new Set([...Object.keys(firstData), ...Object.keys(secondData)])];
-    const differences = {};
 
-    uniqueKeys.forEach((key) => {
+    return uniqueKeys.reduce((differences, key) => {
       const firstValue = firstData[key];
       const secondValue = secondData[key];
 
       if (typeof firstValue === 'object' && typeof secondValue === 'object') {
-        differences[`  ${key}`] = createsDiffObject(firstValue, secondValue);
-      } else if (firstValue === secondValue) {
-        differences[`  ${key}`] = firstValue;
-      } else if (firstValue !== undefined && secondValue !== undefined) {
-        differences[`- ${key}`] = firstValue;
-        differences[`+ ${key}`] = secondValue;
-      } else if (firstValue !== undefined) {
-        differences[`- ${key}`] = firstValue;
-      } else {
-        differences[`+ ${key}`] = secondValue;
+        return { ...differences, [`  ${key}`]: createsDiffObject(firstValue, secondValue) };
       }
-    });
-
-    return differences;
+      if (firstValue === secondValue) {
+        return { ...differences, [`  ${key}`]: firstValue };
+      }
+      if (firstValue !== undefined && secondValue !== undefined) {
+        return { ...differences, [`- ${key}`]: firstValue, [`+ ${key}`]: secondValue };
+      }
+      if (firstValue !== undefined) {
+        return { ...differences, [`- ${key}`]: firstValue };
+      }
+      return { ...differences, [`+ ${key}`]: secondValue };
+    }, {});
   };
 
   return createsDiffObject(objOne, objTwo);
