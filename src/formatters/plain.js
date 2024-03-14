@@ -34,33 +34,38 @@ const plain = (data, parentKey = '') => {
         if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
           const str = `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`;
           return prepareUpdatedResult(result, str);
-        } else {
-          const str = `Property '${fullKey}' was added with value: [complex value]`;
-          return prepareUpdatedResult(result, str);
         }
+        const str = `Property '${fullKey}' was added with value: [complex value]`;
+        return prepareUpdatedResult(result, str);
       }
-      if (key.startsWith('-') && (!nextKey || !(key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')))) {
+
+      if (key.startsWith('-')) {
+        if (nextKey && key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')) {
+          return result;
+        }
         const str = `Property '${fullKey}' was removed`;
         return prepareUpdatedResult(result, str);
       }
+
       const nestedResult = plain(value, fullKey);
       if (nestedResult) {
         return prepareUpdatedResult(result, nestedResult);
       }
-    } else {
-      if (key.startsWith('+')) {
-        if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-          const str = `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`;
-          return prepareUpdatedResult(result, str);
-        } else {
-          const str = `Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`;
-          return prepareUpdatedResult(result, str);
-        }
-      }
-      if (key.startsWith('-') && (!nextKey || !(key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')))) {
-        const str = `Property '${fullKey}' was removed`;
+      return result;
+    }
+
+    if (key.startsWith('+')) {
+      if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
+        const str = `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`;
         return prepareUpdatedResult(result, str);
       }
+      const str = `Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`;
+      return prepareUpdatedResult(result, str);
+    }
+
+    if (key.startsWith('-') && (!nextKey || !(key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')))) {
+      const str = `Property '${fullKey}' was removed`;
+      return prepareUpdatedResult(result, str);
     }
 
     return result;
