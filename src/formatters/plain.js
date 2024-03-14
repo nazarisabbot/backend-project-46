@@ -27,43 +27,45 @@ const plain = (data, parentKey = '') => {
     const prevValue = data[prevKey];
     const fullKey = parentKey ? `${trimsPrefixKey(parentKey)}.${trimsPrefixKey(key)}` : trimsPrefixKey(key);
 
+    let updatedResult = result;
+
     if (isComplexValue(value) && value !== null) {
       if (key.startsWith('+')) {
         if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-          result.push(`Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`);
+          updatedResult = [...result, `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`];
         } else {
-          result.push(`Property '${fullKey}' was added with value: [complex value]`);
+          updatedResult = [...result, `Property '${fullKey}' was added with value: [complex value]`];
         }
       }
       if (key.startsWith('-')) {
         if (nextKey && key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')) {
           // Пропускаем данное действие
         } else {
-          result.push(`Property '${fullKey}' was removed`);
+          updatedResult = [...result, `Property '${fullKey}' was removed`];
         }
       }
       const nestedResult = plain(value, fullKey);
       if (nestedResult) {
-        result.push(nestedResult);
+        updatedResult = [...result, nestedResult];
       }
     } else {
       if (key.startsWith('+')) {
         if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-          result.push(`Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`);
+          updatedResult = [...result, `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`];
         } else {
-          result.push(`Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`);
+          updatedResult = [...result, `Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`];
         }
       }
       if (key.startsWith('-')) {
         if (nextKey && key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')) {
           // Пропускаем данное действие
         } else {
-          result.push(`Property '${fullKey}' was removed`);
+          updatedResult = [...result, `Property '${fullKey}' was removed`];
         }
       }
     }
 
-    return result.filter((str) => str.trim() !== ''); // Фильтруем пустые строки
+    return updatedResult.filter((str) => str.trim() !== ''); // Фильтруем пустые строки
   }, []).join('\n');
 };
 
