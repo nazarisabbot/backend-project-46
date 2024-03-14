@@ -2,27 +2,20 @@ import sortedKeys from './sortedKeys.js';
 
 const stylish = (data) => {
   const createLayOut = (obj, depth) => {
-    let result = '';
     const keys = sortedKeys(Object.keys(obj));
-
-    keys.forEach((key) => {
+    return keys.map((key) => {
       const value = obj[key];
       const leftIndent = key[0] === '-' || key[0] === '+' ? 2 : 0;
 
       switch (true) {
         case (typeof value === 'object' && value !== null):
-          result += `${' '.repeat((depth + 1) * 4)}${key.trim()}: {\n`.slice(leftIndent);
-          result += createLayOut(value, depth + 1);
-          result += `${' '.repeat((depth + 1) * 4)}}\n`;
-          break;
+          return `${' '.repeat((depth + 1) * 4)}${key.trim()}: {\n${createLayOut(value, depth + 1)}${' '.repeat((depth + 1) * 4)}}\n`.slice(leftIndent);
         case (leftIndent > 0):
-          result += `${' '.repeat((depth + 1) * 4)}${key}: ${value}\n`.slice(leftIndent);
-          break;
+          return `${' '.repeat((depth + 1) * 4)}${key}: ${value}\n`.slice(leftIndent);
         default:
-          result += `${' '.repeat((depth + 1) * 4)}${key.trim()}: ${value}\n`;
+          return `${' '.repeat((depth + 1) * 4)}${key.trim()}: ${value}\n`;
       }
-    });
-    return result;
+    }).join('');
   };
 
   return `{\n${createLayOut(data, 0)}}`;
