@@ -1,5 +1,5 @@
 export default (keys) => {
-  const sortedKeys = keys.sort((a, b) => {
+  const sortedKeys = [...keys].sort((a, b) => {
     const alphaSort = a.replace(/^\W+/, '').localeCompare(b.replace(/^\W+/, ''));
     if (alphaSort !== 0) {
       return alphaSort;

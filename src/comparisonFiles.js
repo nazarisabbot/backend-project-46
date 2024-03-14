@@ -5,10 +5,7 @@ const comparisonFiles = (path1, path2) => {
   const objTwo = parseFile(path2);
 
   const createsDiffObject = (firstData, secondData) => {
-    const keys1 = Object.keys(firstData);
-    const keys2 = Object.keys(secondData);
-
-    const uniqueKeys = new Set([...keys1, ...keys2]);
+    const uniqueKeys = [...new Set([...Object.keys(firstData), ...Object.keys(secondData)])];
     const differences = {};
 
     uniqueKeys.forEach((key) => {
