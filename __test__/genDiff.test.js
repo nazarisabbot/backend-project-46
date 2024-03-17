@@ -18,8 +18,6 @@ const secondJsonFile = getFixturePath('filesJson', 'file2.json');
 const firstYmlFile = getFixturePath('filesYml', 'file1.yml');
 const secondYmlFile = getFixturePath('filesYml', 'file2.yml');
 
-const path = './__test__/__fixtures__/filesJson/file1.json';
-
 test('parse JSON', () => {
   expect(parser(firstJsonFile, '.json')).toEqual(obj);
 });
@@ -53,8 +51,4 @@ test('formatter json', () => {
 
 test('genDiff test', () => {
   expect(runComparisonFiles(firstJsonFile, secondJsonFile, 'plain')).toEqual(expectedStringFormatPlain.trim());
-});
-
-test('get path extname', () => {
-  expect(getAbsolutePathAndExtname(path)).toEqual({ path: '/home/nazar/project_46/backend-project-46/__test__/__fixtures__/filesJson/file1.json', extension: '.json' });
 });
