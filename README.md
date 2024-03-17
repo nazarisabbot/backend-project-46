@@ -33,7 +33,7 @@
     node ./bin/gendiff --format stylish ./path/file1.json ./path/file2.json
     ``` 
    
-*Так же можно поменять формат вывода, указав нужный флаг --format flag (plain, json)*
+*Так же можно поменять формат вывода, указав нужный флаг --format plain или --format json*
 
 ### Тестирование
 ```bash
