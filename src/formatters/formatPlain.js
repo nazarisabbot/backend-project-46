@@ -18,7 +18,7 @@ const stringifyValue = (value) => {
 
 const prepareUpdatedResult = (result, str) => result.concat([str]).filter((s) => s.trim() !== '');
 
-const plain = (data, parentKey = '') => {
+const formatPlain = (data, parentKey = '') => {
   const arrSortedKeys = sortedKeys(Object.keys(data));
 
   return arrSortedKeys.reduce((result, key, index) => {
@@ -47,7 +47,7 @@ const plain = (data, parentKey = '') => {
         return prepareUpdatedResult(result, str);
       }
 
-      const nestedResult = plain(value, fullKey);
+      const nestedResult = formatPlain(value, fullKey);
       if (nestedResult) {
         return prepareUpdatedResult(result, nestedResult);
       }
@@ -72,4 +72,4 @@ const plain = (data, parentKey = '') => {
   }, []).join('\n');
 };
 
-export default plain;
+export default formatPlain;

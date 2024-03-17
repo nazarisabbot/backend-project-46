@@ -1,15 +1,15 @@
-import stylishFormatter from './stylish.js';
-import plainFormatter from './plain.js';
-import formatToJson from './json.js';
+import formatStylish from './formatStylish.js';
+import plainFormatter from './formatPlain.js';
+import formatJson from './formatJson.js';
 
 export default (diff, format) => {
   switch (format) {
     case 'json':
-      return formatToJson(diff);
+      return formatJson(diff);
     case 'plain':
       return plainFormatter(diff);
     case 'stylish':
     default:
-      return stylishFormatter(diff);
+      return formatStylish(diff);
   }
 };

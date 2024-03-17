@@ -1,9 +1,4 @@
-import parseFile from './parsers/parser.js';
-
-const comparisonFiles = (path1, path2) => {
-  const objOne = parseFile(path1);
-  const objTwo = parseFile(path2);
-
+const generateDiff = (objOne, objTwo) => {
   const createsDiffObject = (firstData, secondData) => {
     const uniqueKeys = [...new Set([...Object.keys(firstData), ...Object.keys(secondData)])];
 
@@ -30,4 +25,4 @@ const comparisonFiles = (path1, path2) => {
   return createsDiffObject(objOne, objTwo);
 };
 
-export default comparisonFiles;
+export default generateDiff;

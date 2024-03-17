@@ -1,6 +1,6 @@
 import sortedKeys from './sortedKeys.js';
 
-const stylish = (data) => {
+const formatStylish = (data) => {
   const createLayOut = (obj, depth) => {
     const keys = sortedKeys(Object.keys(obj));
     return keys.map((key) => {
@@ -21,4 +21,4 @@ const stylish = (data) => {
   return `{\n${createLayOut(data, 0)}}`;
 };
 
-export default stylish;
+export default formatStylish;

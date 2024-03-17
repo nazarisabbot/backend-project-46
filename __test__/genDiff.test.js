@@ -1,10 +1,11 @@
 import getFixturePath from './getFixturePath.js';
-import parseFile from '../src/parsers/parser.js';
-import comparisonFlatFiles from '../src/comparisonFiles.js';
+import getAbsolutePathAndExtname from '../src/getAbsolutePathAndExtname.js';
+import parser from '../src/parser/parser.js';
+import generateDiff from '../src/comparisonFiles.js';
 import runComparisonFiles from '../src/index.js';
-import stylish from '../src/formatters/stylish.js';
-import plain from '../src/formatters/plain.js';
-import formatToJson from '../src/formatters/json.js';
+import formatStylish from '../src/formatters/formatStylish.js';
+import formatPlain from '../src/formatters/formatPlain.js';
+import formatJson from '../src/formatters/formatJson.js';
 import expectedStringFormatStylish from './__fixtures__/filesJson/expectedStringFormatStylish.js';
 import expectedStringFormatPlain from './__fixtures__/filesJson/expectedStringFormatPlain.js';
 import expectedYmlString from './__fixtures__/filesYml/expectedYmlString.js';
@@ -17,37 +18,43 @@ const secondJsonFile = getFixturePath('filesJson', 'file2.json');
 const firstYmlFile = getFixturePath('filesYml', 'file1.yml');
 const secondYmlFile = getFixturePath('filesYml', 'file2.yml');
 
+const path = './__test__/__fixtures__/filesJson/file1.json';
+
 test('parse JSON', () => {
-  expect(parseFile(firstJsonFile)).toEqual(obj);
+  expect(parser(firstJsonFile, '.json')).toEqual(obj);
 });
 
 test('parse YML', () => {
-  expect(parseFile(firstYmlFile)).toEqual(obj);
+  expect(parser(firstYmlFile, '.yml')).toEqual(obj);
 });
 
 test('different json files', () => {
-  const diffObj = comparisonFlatFiles(firstJsonFile, secondJsonFile);
-  expect(stylish(diffObj)
+  const diffObj = generateDiff(parser(firstJsonFile, '.json'), parser(secondJsonFile, '.json'));
+  expect(formatStylish(diffObj)
     .trim()).toBe(expectedStringFormatStylish.trim());
 });
 
 test('different yml files', () => {
-  const diffObj = comparisonFlatFiles(firstYmlFile, secondYmlFile);
-  expect(stylish(diffObj)
+  const diffObj = generateDiff(parser(firstYmlFile, '.yml'), parser(secondYmlFile, '.yml'));
+  expect(formatStylish(diffObj)
     .trim()).toBe(expectedYmlString.trim());
 });
 
 test('formatter plain', () => {
-  const diffObj = comparisonFlatFiles(firstJsonFile, secondJsonFile);
-  expect(plain(diffObj)
+  const diffObj = generateDiff(parser(firstJsonFile, '.json'), parser(secondJsonFile, '.json'));
+  expect(formatPlain(diffObj)
     .trim()).toBe(expectedStringFormatPlain.trim());
 });
 
 test('formatter json', () => {
-  const diffObj = comparisonFlatFiles(firstJsonFile, secondJsonFile);
-  expect(formatToJson(diffObj)).toBe(expectedStringFormatJson.trim());
+  const diffObj = generateDiff(parser(firstJsonFile, '.json'), parser(secondJsonFile, '.json'));
+  expect(formatJson(diffObj)).toBe(expectedStringFormatJson.trim());
 });
 
 test('genDiff test', () => {
   expect(runComparisonFiles(firstJsonFile, secondJsonFile, 'plain')).toEqual(expectedStringFormatPlain.trim());
+});
+
+test('get path extname', () => {
+  expect(getAbsolutePathAndExtname(path)).toEqual({ path: '/home/nazar/project_46/backend-project-46/__test__/__fixtures__/filesJson/file1.json', extension: '.json' });
 });
