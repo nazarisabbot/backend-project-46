@@ -56,7 +56,7 @@ make test
 
 *Иллюстрация форматирования "json"*
 [![asciicast](https://asciinema.org/a/YAPmK23NEKPMK8NPAj5fGDB2V.svg)](  https://asciinema.org/a/YAPmK23NEKPMK8NPAj5fGDB2V
-)
+) 
 
 
 
