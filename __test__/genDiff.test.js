@@ -1,5 +1,4 @@
 import getFixturePath from './getFixturePath.js';
-import getAbsolutePathAndExtname from '../src/getAbsolutePathAndExtname.js';
 import parser from '../src/parser/parser.js';
 import generateDiff from '../src/comparisonFiles.js';
 import runComparisonFiles from '../src/index.js';
