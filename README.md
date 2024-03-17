@@ -15,22 +15,26 @@
 Следуйте нижеуказанным шагам:
 
 1. Клонируйте репозиторий
-*git clone <URL-репозитория-проекта*
+   ```bash
+   git clone <URL-репозитория-проекта>
 
-2. Перейдите в папку проекта
-*cd <путь к проекту>*
+2. Установите зависимости
+   ```bush
+   npm install
 
-3. Установите зависимости
-*npm install*
+3. Свяжите утилиту, чтобы вы могли использовать ее в командной строке и из любого места вашей файловой системы.
+   ```bush
+   npm link
 
-4. Свяжите утилиту, чтобы вы могли использовать ее в командной строке и из любого места вашей файловой системы.
-*npm link*
+4. Базовый вызов
+    ```bush
+    node ./bin/gendiff --format stylish ./path/file1.json ./path/file2.json
 
-### Базовый вызов
-*node ./bin/gendiff --format (plain, json. формат stylish можно не указывать, так как он установлен по умолчанию) ./path/file1.json ./path/file2.json*
+*Так же можно поменять формат вывода, указав нужный фдаг --format flag (plain, json)*
 
 ### Тестирование
-*make test*
+    ```bush
+    make test
 
 *Иллюстрация обработки плоской структуры*
 [![asciicast](https://asciinema.org/a/JxdWXcr6pTa91Zu4lBpQS1W0T.svg)](  https://asciinema.org/a/JxdWXcr6pTa91Zu4lBpQS1W0T)
