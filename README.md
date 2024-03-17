@@ -40,21 +40,23 @@
 make test
 ```
 
-*Иллюстрация обработки плоской структуры*  
-[![asciicast](https://asciinema.org/a/JxdWXcr6pTa91Zu4lBpQS1W0T.svg)](https://asciinema.org/a/JxdWXcr6pTa91Zu4lBpQS1W0T){:target="_blank"}
+*Иллюстрация обработки плоской структуры*
+[![asciicast](https://asciinema.org/a/JxdWXcr6pTa91Zu4lBpQS1W0T.svg)](  https://asciinema.org/a/JxdWXcr6pTa91Zu4lBpQS1W0T)
 
-*Иллюстрация обработки плоской yml структуры*  
-[![asciicast](https://asciinema.org/a/YmB05DQXqlbZydtSO0cn4nvDd.svg)](https://asciinema.org/a/YmB05DQXqlbZydtSO0cn4nvDd){:target="_blank"}
+*Иллюстрация обработки плоской yml структуры*
+[![asciicast](https://asciinema.org/a/YmB05DQXqlbZydtSO0cn4nvDd.svg)]( https://asciinema.org/a/YmB05DQXqlbZydtSO0cn4nvDd)
 
-*Иллюстрация обработки структуры с вложенностью*  
-[![asciicast](https://asciinema.org/a/dm8BMsMzDetk5hqrudozfbAoH.svg)](https://asciinema.org/a/dm8BMsMzDetk5hqrudozfbAoH){:target="_blank"}
+*Иллюстрация обработки структуры с вложенностью*
+[![asciicast](https://asciinema.org/a/dm8BMsMzDetk5hqrudozfbAoH.svg)]( https://asciinema.org/a/dm8BMsMzDetk5hqrudozfbAoH
+)
 
-*Иллюстрация форматирования "plain"*  
-[![asciicast](https://asciinema.org/a/RTFhopDw7tMMCJYk3JLt3mohi.svg)](https://asciinema.org/a/RTFhopDw7tMMCJYk3JLt3mohi){:target="_blank"}
+*Иллюстрация форматирования "plain"*
+[![asciicast](https://asciinema.org/a/RTFhopDw7tMMCJYk3JLt3mohi.svg)]( https://asciinema.org/a/RTFhopDw7tMMCJYk3JLt3mohi
+)
 
-*Иллюстрация форматирования "json"*  
-[![asciicast](https://asciinema.org/a/YAPmK23NEKPMK8NPAj5fGDB2V.svg)](https://asciinema.org/a/YAPmK23NEKPMK8NPAj5fGDB2V){:target="_blank"}
-
+*Иллюстрация форматирования "json"*
+[![asciicast](https://asciinema.org/a/YAPmK23NEKPMK8NPAj5fGDB2V.svg)](  https://asciinema.org/a/YAPmK23NEKPMK8NPAj5fGDB2V
+)
 
 
 
