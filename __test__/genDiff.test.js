@@ -1,5 +1,6 @@
+import fs from 'fs';
 import getFixturePath from './getFixturePath.js';
-import parser from '../src/parser/parser.js';
+import parseFile from '../src/parser/parser.js';
 import generateDiff from '../src/comparisonFiles.js';
 import runComparisonFiles from '../src/index.js';
 import formatStylish from '../src/formatters/formatStylish.js';
@@ -18,33 +19,43 @@ const firstYmlFile = getFixturePath('filesYml', 'file1.yml');
 const secondYmlFile = getFixturePath('filesYml', 'file2.yml');
 
 test('parse JSON', () => {
-  expect(parser(firstJsonFile, '.json')).toEqual(obj);
+  const firstData = fs.readFileSync(firstJsonFile, 'utf-8');
+  expect(parseFile(firstData, 'json')).toEqual(obj);
 });
 
 test('parse YML', () => {
-  expect(parser(firstYmlFile, '.yml')).toEqual(obj);
+  const firstData = fs.readFileSync(firstYmlFile, 'utf-8');
+  expect(parseFile(firstData, 'yml')).toEqual(obj);
 });
 
 test('different json files', () => {
-  const diffObj = generateDiff(parser(firstJsonFile, '.json'), parser(secondJsonFile, '.json'));
+  const firstData = fs.readFileSync(firstJsonFile, 'utf-8');
+  const secondData = fs.readFileSync(secondJsonFile, 'utf-8');
+  const diffObj = generateDiff(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
   expect(formatStylish(diffObj)
     .trim()).toBe(expectedStringFormatStylish.trim());
 });
 
 test('different yml files', () => {
-  const diffObj = generateDiff(parser(firstYmlFile, '.yml'), parser(secondYmlFile, '.yml'));
+  const firstData = fs.readFileSync(firstYmlFile, 'utf-8');
+  const secondData = fs.readFileSync(secondYmlFile, 'utf-8');
+  const diffObj = generateDiff(parseFile(firstData, 'yml'), parseFile(secondData, 'yml'));
   expect(formatStylish(diffObj)
     .trim()).toBe(expectedYmlString.trim());
 });
 
 test('formatter plain', () => {
-  const diffObj = generateDiff(parser(firstJsonFile, '.json'), parser(secondJsonFile, '.json'));
+  const firstData = fs.readFileSync(firstJsonFile, 'utf-8');
+  const secondData = fs.readFileSync(secondJsonFile, 'utf-8');
+  const diffObj = generateDiff(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
   expect(formatPlain(diffObj)
     .trim()).toBe(expectedStringFormatPlain.trim());
 });
 
 test('formatter json', () => {
-  const diffObj = generateDiff(parser(firstJsonFile, '.json'), parser(secondJsonFile, '.json'));
+  const firstData = fs.readFileSync(firstJsonFile, 'utf-8');
+  const secondData = fs.readFileSync(secondJsonFile, 'utf-8');
+  const diffObj = generateDiff(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
   expect(formatJson(diffObj)).toBe(expectedStringFormatJson.trim());
 });
 

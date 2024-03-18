@@ -1,4 +1,4 @@
 /node_modules/
 /.idea/
 /coverage/
-/eslint_output.json/
+/eslint_output.json
