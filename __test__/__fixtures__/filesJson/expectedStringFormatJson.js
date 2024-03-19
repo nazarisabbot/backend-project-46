@@ -43,6 +43,5 @@ const expectedStringFormatJson = `
     "fee": 100500
   }
 }
-
 `;
 export default expectedStringFormatJson;
