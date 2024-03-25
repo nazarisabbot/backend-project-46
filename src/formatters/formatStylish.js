@@ -1,24 +1,59 @@
 import sortedKeys from './sortedKeys.js';
 
-const formatStylish = (data) => {
-  const createLayOut = (obj, depth) => {
-    const keys = sortedKeys(Object.keys(obj));
-    return keys.map((key) => {
-      const value = obj[key];
-      const leftIndent = key[0] === '-' || key[0] === '+' ? 2 : 0;
+import generateDiffAbstraction from '../generateDiff.js';
+import fs from 'fs';
+import parseFile from '../parser/parser.js';
 
-      switch (true) {
-        case (typeof value === 'object' && value !== null):
-          return `${' '.repeat((depth + 1) * 4)}${key.trim()}: {\n${createLayOut(value, depth + 1)}${' '.repeat((depth + 1) * 4)}}\n`.slice(leftIndent);
-        case (leftIndent > 0):
-          return `${' '.repeat((depth + 1) * 4)}${key}: ${value}\n`.slice(leftIndent);
+const path1 = './temp/file1.json';
+const path2 = './temp/file2.json';
+
+const firstData = fs.readFileSync(path1, 'utf-8');
+const secondData = fs.readFileSync(path2, 'utf-8');
+
+const data1 = generateDiffAbstraction(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
+
+const formatStylish = (data) => {
+  const createLayOut = (arr, depth) => {
+    const sortedData = sortedKeys(arr);
+
+    return sortedData.map((item) => {
+      const {
+        type,
+        key,
+        oldValue,
+        newValue,
+        children,
+      } = item;
+
+      let prefix = '';
+
+      if (oldValue === '-') {
+        prefix = '+ ';
+      } else if (newValue === '-') {
+        prefix = '- ';
+      }
+
+      const indent = ' '.repeat(depth * 4);
+
+      switch (type) {
+        case 'nested':
+          return `${indent.slice(prefix === '- ' || prefix === '+ ' ? 2 : 0)}${prefix}${key}: {\n${createLayOut(children, depth + 1)}${indent}}\n`;
+        case 'not_changed':
+          return `${indent}${key}: ${newValue}\n`;
+        case 'removed':
+          return `${indent.slice(2)}- ${key}: ${oldValue}\n`;
+        case 'changed':
+          return `${indent.slice(2)}- ${key}: ${oldValue}\n${indent.slice(2)}+ ${key}: ${newValue}\n`;
+        case 'added':
+          return `${indent.slice(2)}+ ${key}: ${newValue}\n`;
         default:
-          return `${' '.repeat((depth + 1) * 4)}${key.trim()}: ${value}\n`;
+          throw new Error(`Unknown type: ${type}`);
       }
     }).join('');
   };
 
-  return `{\n${createLayOut(data, 0)}}`;
+  return `{\n${createLayOut(data, 1)}}`;
 };
 
+console.log(formatStylish(data1));
 export default formatStylish;

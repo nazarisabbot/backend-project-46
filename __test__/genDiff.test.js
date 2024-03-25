@@ -2,6 +2,7 @@ import fs from 'fs';
 import getFixturePath from './getFixturePath.js';
 import parseFile from '../src/parser/parser.js';
 import generateDiff from '../src/comparisonFiles.js';
+import generateDiffAbstraction from '../src/generateDiff.js';
 import runComparisonFiles from '../src/index.js';
 import formatStylish from '../src/formatters/formatStylish.js';
 import formatPlain from '../src/formatters/formatPlain.js';
@@ -10,6 +11,7 @@ import expectedStringFormatStylish from './__fixtures__/filesJson/expectedString
 import expectedStringFormatPlain from './__fixtures__/filesJson/expectedStringFormatPlain.js';
 import expectedYmlString from './__fixtures__/filesYml/expectedYmlString.js';
 import expectedStringFormatJson from './__fixtures__/filesJson/expectedStringFormatJson.js';
+import expectedStringFromGenerateDiff from './__fixtures__/filesJson/expectedStringFromGenerateDiff.js';
 import obj from './__fixtures__/filesJson/obj.js';
 
 const firstJsonFile = getFixturePath('filesJson', 'file1.json');
@@ -28,10 +30,10 @@ test('parse YML', () => {
   expect(parseFile(firstData, 'yml')).toEqual(obj);
 });
 
-test('different json files', () => {
+test('different by stylish formatter files', () => {
   const firstData = fs.readFileSync(firstJsonFile, 'utf-8');
   const secondData = fs.readFileSync(secondJsonFile, 'utf-8');
-  const diffObj = generateDiff(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
+  const diffObj = generateDiffAbstraction(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
   expect(formatStylish(diffObj)
     .trim()).toBe(expectedStringFormatStylish.trim());
 });
@@ -61,4 +63,10 @@ test('formatter json', () => {
 
 test('genDiff test', () => {
   expect(runComparisonFiles(firstJsonFile, secondJsonFile, 'plain')).toEqual(expectedStringFormatPlain.trim());
+});
+
+test('generateDiff test', () => {
+  const firstData = fs.readFileSync(firstJsonFile, 'utf-8');
+  const secondData = fs.readFileSync(secondJsonFile, 'utf-8');
+  expect(JSON.stringify(generateDiffAbstraction(parseFile(firstData, 'json'), parseFile(secondData, 'json')), null, 2)).toEqual(expectedStringFromGenerateDiff.trim());
 });
