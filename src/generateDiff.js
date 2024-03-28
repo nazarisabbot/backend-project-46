@@ -1,14 +1,19 @@
-import fs from 'fs';
-import parseFile from './parser/parser.js';
+const sortedKeys = (arr) => [...arr].sort((a, b) => {
+  const matchA = a.match(/([^0-9]*)(\d*)/);
+  const matchB = b.match(/([^0-9]*)(\d*)/);
 
-const path1 = './temp/file1.json';
-const path2 = './temp/file2.json';
+  const [, keyA, numA = ''] = matchA;
+  const [, keyB, numB = ''] = matchB;
 
-const firstData = fs.readFileSync(path1, 'utf-8');
-const secondData = fs.readFileSync(path2, 'utf-8');
+  if (keyA < keyB) return -1;
+  if (keyA > keyB) return 1;
 
-const one = parseFile(firstData, 'json');
-const two = parseFile(secondData, 'json');
+  if (numA < numB) return -1;
+  if (numA > numB) return 1;
+
+  return 0;
+});
+
 const generateDiffAbstraction = (firstObj, secondObj) => {
   const createDiffNode = (type, key, oldValue, newValue, children = []) => ({
     type,
@@ -20,18 +25,13 @@ const generateDiffAbstraction = (firstObj, secondObj) => {
 
   const createLayout = (obj1, obj2) => {
     const uniqKeys = [...new Set([...Object.keys(obj1), ...Object.keys(obj2)])];
+    const sortedArrKeys = sortedKeys(uniqKeys);
 
-    return uniqKeys.map((key) => {
+    return sortedArrKeys.map((key) => {
       const firstValue = obj1[key];
       const secondValue = obj2[key];
 
       switch (true) {
-        case typeof firstValue === 'object' && typeof secondValue !== 'object' && secondValue !== undefined:
-          return createDiffNode('nested', key, 'object', secondValue, createLayout(firstValue, {}));
-        case typeof firstValue === 'object' && secondValue === undefined:
-          return createDiffNode('nested', key, 'object', '-', createLayout(firstValue, {}));
-        case firstValue === undefined && typeof secondValue === 'object':
-          return createDiffNode('nested', key, '-', 'object', createLayout({}, secondValue));
         case typeof firstValue === 'object' && typeof secondValue === 'object':
           return createDiffNode('nested', key, 'object', 'object', createLayout(firstValue, secondValue));
         case firstValue === secondValue:
@@ -39,9 +39,9 @@ const generateDiffAbstraction = (firstObj, secondObj) => {
         case firstValue !== undefined && secondValue !== undefined:
           return createDiffNode('changed', key, firstValue, secondValue);
         case firstValue !== undefined:
-          return createDiffNode('removed', key, firstValue, '-');
+          return createDiffNode('removed', key, firstValue, secondValue);
         case secondValue !== undefined:
-          return createDiffNode('added', key, '-', secondValue);
+          return createDiffNode('added', key, firstValue, secondValue);
         default:
           throw new Error(`Unknown type: ${firstValue}`);
       }
@@ -51,5 +51,4 @@ const generateDiffAbstraction = (firstObj, secondObj) => {
   return createLayout(firstObj, secondObj);
 };
 
-// console.log(JSON.stringify(generateDiffAbstraction(one, two), null, 2));
 export default generateDiffAbstraction;

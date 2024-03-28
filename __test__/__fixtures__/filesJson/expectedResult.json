@@ -1,4 +1,3 @@
-const expectedStringFromGenerateDiff = `
 [
   {
     "type": "nested",
@@ -140,6 +139,3 @@ const expectedStringFromGenerateDiff = `
     "children": []
   }
 ]
-`;
-
-export default expectedStringFromGenerateDiff;

@@ -1,7 +1,6 @@
 import fs from 'fs';
 import getFixturePath from './getFixturePath.js';
 import parseFile from '../src/parser/parser.js';
-import generateDiff from '../src/comparisonFiles.js';
 import generateDiffAbstraction from '../src/generateDiff.js';
 import runComparisonFiles from '../src/index.js';
 import formatStylish from '../src/formatters/formatStylish.js';
@@ -10,7 +9,6 @@ import formatJson from '../src/formatters/formatJson.js';
 import expectedStringFormatStylish from './__fixtures__/filesJson/expectedStringFormatStylish.js';
 import expectedStringFormatPlain from './__fixtures__/filesJson/expectedStringFormatPlain.js';
 import expectedYmlString from './__fixtures__/filesYml/expectedYmlString.js';
-import expectedStringFormatJson from './__fixtures__/filesJson/expectedStringFormatJson.js';
 import expectedStringFromGenerateDiff from './__fixtures__/filesJson/expectedStringFromGenerateDiff.js';
 import obj from './__fixtures__/filesJson/obj.js';
 
@@ -41,7 +39,7 @@ test('different by stylish formatter files', () => {
 test('different yml files', () => {
   const firstData = fs.readFileSync(firstYmlFile, 'utf-8');
   const secondData = fs.readFileSync(secondYmlFile, 'utf-8');
-  const diffObj = generateDiff(parseFile(firstData, 'yml'), parseFile(secondData, 'yml'));
+  const diffObj = generateDiffAbstraction(parseFile(firstData, 'yml'), parseFile(secondData, 'yml'));
   expect(formatStylish(diffObj)
     .trim()).toBe(expectedYmlString.trim());
 });
@@ -49,20 +47,21 @@ test('different yml files', () => {
 test('formatter plain', () => {
   const firstData = fs.readFileSync(firstJsonFile, 'utf-8');
   const secondData = fs.readFileSync(secondJsonFile, 'utf-8');
-  const diffObj = generateDiff(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
+  const diffObj = generateDiffAbstraction(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
   expect(formatPlain(diffObj)
     .trim()).toBe(expectedStringFormatPlain.trim());
 });
 
 test('formatter json', () => {
+  const expectedJsonFormat = fs.readFileSync('./__test__/__fixtures__/filesJson/expectedResult.json', 'utf8');
   const firstData = fs.readFileSync(firstJsonFile, 'utf-8');
   const secondData = fs.readFileSync(secondJsonFile, 'utf-8');
-  const diffObj = generateDiff(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
-  expect(formatJson(diffObj)).toBe(expectedStringFormatJson.trim());
+  const diffObj = generateDiffAbstraction(parseFile(firstData, 'json'), parseFile(secondData, 'json'));
+  expect(formatJson(diffObj)).toBe(expectedJsonFormat);
 });
 
 test('genDiff test', () => {
-  expect(runComparisonFiles(firstJsonFile, secondJsonFile, 'plain')).toEqual(expectedStringFormatPlain.trim());
+  expect(runComparisonFiles(firstJsonFile, secondJsonFile, 'stylish')).toEqual(expectedStringFormatStylish.trim());
 });
 
 test('generateDiff test', () => {

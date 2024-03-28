@@ -1,75 +1,50 @@
-import sortedKeys from './sortedKeys.js';
-
-const trimsPrefixKey = (key) => (key.startsWith('+') || key.startsWith('-') ? key.slice(2) : key.trim());
-const isComplexValue = (v) => typeof v === 'object';
-
-const stringifyValue = (value) => {
-  if (value === null) {
-    return 'null';
+const formatValue = (value) => {
+  if (typeof value === 'object' && value !== null) {
+    return '[complex value]';
   }
+
+  if (typeof value === 'boolean' || typeof value === 'number') {
+    return value;
+  }
+
   if (typeof value === 'string') {
     return `'${value}'`;
   }
-  if (isComplexValue(value)) {
-    return '[complex value]';
+
+  if (value === null) {
+    return 'null';
   }
-  return value;
+
+  if (value === '') {
+    return "''";
+  }
+
+  return undefined;
 };
 
-const prepareUpdatedResult = (result, str) => result.concat([str]).filter((s) => s.trim() !== '');
+const formatPlain = (items, ancestry = '') => items.map((item) => {
+  const {
+    type,
+    key,
+    oldValue,
+    newValue,
+    children,
+  } = item;
 
-const formatPlain = (data, parentKey = '') => {
-  const arrSortedKeys = sortedKeys(Object.keys(data));
+  const fullKey = ancestry ? `${ancestry}.${key}` : key;
 
-  return arrSortedKeys.reduce((result, key, index) => {
-    const nextKey = arrSortedKeys[index + 1];
-    const prevKey = arrSortedKeys[index - 1];
-
-    const value = data[key];
-    const prevValue = data[prevKey];
-    const fullKey = parentKey ? `${trimsPrefixKey(parentKey)}.${trimsPrefixKey(key)}` : trimsPrefixKey(key);
-
-    if (isComplexValue(value) && value !== null) {
-      if (key.startsWith('+')) {
-        if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-          const str = `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`;
-          return prepareUpdatedResult(result, str);
-        }
-        const str = `Property '${fullKey}' was added with value: [complex value]`;
-        return prepareUpdatedResult(result, str);
-      }
-
-      if (key.startsWith('-')) {
-        if (nextKey && key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')) {
-          return result;
-        }
-        const str = `Property '${fullKey}' was removed`;
-        return prepareUpdatedResult(result, str);
-      }
-
-      const nestedResult = formatPlain(value, fullKey);
-      if (nestedResult) {
-        return prepareUpdatedResult(result, nestedResult);
-      }
-      return result;
-    }
-
-    if (key.startsWith('+')) {
-      if (prevKey && key.slice(2) === prevKey.slice(2) && prevKey.startsWith('-')) {
-        const str = `Property '${fullKey}' was updated. From ${stringifyValue(prevValue)} to ${stringifyValue(value)}`;
-        return prepareUpdatedResult(result, str);
-      }
-      const str = `Property '${fullKey}' was added with value: ${typeof value === 'string' ? `'${value}'` : value}`;
-      return prepareUpdatedResult(result, str);
-    }
-
-    if (key.startsWith('-') && (!nextKey || !(key.slice(2) === nextKey.slice(2) && nextKey.startsWith('+')))) {
-      const str = `Property '${fullKey}' was removed`;
-      return prepareUpdatedResult(result, str);
-    }
-
-    return result;
-  }, []).join('\n');
-};
+  switch (type) {
+    case 'nested':
+      return formatPlain(children, fullKey);
+    case 'added':
+      return `Property '${fullKey}' was added with value: ${formatValue(newValue)}`;
+    case 'removed':
+      return `Property '${fullKey}' was removed`;
+    case 'changed':
+      return `Property '${fullKey}' was updated. From ${formatValue(oldValue)} to ${formatValue(newValue)}`;
+    default:
+      return null;
+  }
+}).filter(Boolean).join('\n');
 
 export default formatPlain;
