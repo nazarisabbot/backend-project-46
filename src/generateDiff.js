@@ -1,18 +1,22 @@
-const sortedKeys = (arr) => [...arr].sort((a, b) => {
-  const matchA = a.match(/([^0-9]*)(\d*)/);
-  const matchB = b.match(/([^0-9]*)(\d*)/);
+const sortedKeys = (arr) => {
+  const copyArr = [...arr];
+  copyArr.sort((a, b) => {
+    const matchA = a.match(/([^0-9]*)(\d*)/);
+    const matchB = b.match(/([^0-9]*)(\d*)/);
 
-  const [, keyA, numA = ''] = matchA;
-  const [, keyB, numB = ''] = matchB;
+    const [, keyA, numA = ''] = matchA;
+    const [, keyB, numB = ''] = matchB;
 
-  if (keyA < keyB) return -1;
-  if (keyA > keyB) return 1;
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
 
-  if (numA < numB) return -1;
-  if (numA > numB) return 1;
+    if (numA < numB) return -1;
+    if (numA > numB) return 1;
 
-  return 0;
-});
+    return 0;
+  });
+  return copyArr;
+};
 
 const generateDiffAbstraction = (firstObj, secondObj) => {
   const createDiffNode = (type, key, oldValue, newValue, children = []) => ({
