@@ -1,20 +1,13 @@
 import _ from 'lodash';
 
-const sortedKeys = (arr) => _.clone(arr).sort((a, b) => {
-  const matchA = a.match(/([^0-9]*)(\d*)/);
-  const matchB = b.match(/([^0-9]*)(\d*)/);
-
-  const [, keyA, numA = ''] = matchA;
-  const [, keyB, numB = ''] = matchB;
-
-  if (keyA < keyB) return -1;
-  if (keyA > keyB) return 1;
-
-  if (numA < numB) return -1;
-  if (numA > numB) return 1;
-
-  return 0;
-});
+const sortedKeys = (arr) => {
+  const sortedPairs = _.sortBy(arr.map((item) => {
+    const match = item.match(/([^0-9]*)(\d*)/);
+    const [, key, num = ''] = match;
+    return { key, num, original: item };
+  }), ['key', 'num']);
+  return sortedPairs.map((pair) => pair.original);
+};
 
 const generateDiffAbstraction = (firstObj, secondObj) => {
   const createDiffNode = (type, key, oldValue, newValue, children = []) => ({
