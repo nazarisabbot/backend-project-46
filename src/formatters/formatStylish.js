@@ -8,16 +8,18 @@ const formatStylish = (data) => {
       children,
     } = item;
 
-    let prefix = '';
-
-    if (oldValue === '-') {
-      prefix = '+ ';
-    }
-    if (newValue === '-') {
-      prefix = '- ';
-    }
+    const getPrefix = (firstValue, secondValue) => {
+      if (firstValue === '-') {
+        return '+ ';
+      }
+      if (secondValue === '-') {
+        return '- ';
+      }
+      return '';
+    };
 
     const indent = ' '.repeat(depth * 4);
+    const prefix = getPrefix(oldValue, newValue);
 
     const formatValue = (value, currentDepth) => {
       if (typeof value === 'object' && value !== null && value !== undefined) {
