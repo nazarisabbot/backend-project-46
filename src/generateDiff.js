@@ -1,4 +1,6 @@
-const sortedKeys = (arr) => [].concat(arr).sort((a, b) => {
+import _ from 'lodash';
+
+const sortedKeys = (arr) => _.clone(arr).sort((a, b) => {
   const matchA = a.match(/([^0-9]*)(\d*)/);
   const matchB = b.match(/([^0-9]*)(\d*)/);
 
