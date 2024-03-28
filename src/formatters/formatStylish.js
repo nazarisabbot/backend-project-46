@@ -52,9 +52,11 @@ const formatStylish = (data) => {
       case 'changed':
         if (typeof oldValue === 'object' && typeof newValue === 'object') {
           return `${indent.slice(2)}- ${key}: ${formatValue(oldValue, depth)}\n${indent.slice(2)}+ ${key}: ${formatValue(newValue, depth)}\n`;
-        } else if (typeof oldValue === 'object') {
+        }
+        if (typeof oldValue === 'object') {
           return `${indent.slice(2)}- ${key}: ${formatValue(oldValue, depth)}\n${indent.slice(2)}+ ${key}: ${newValue}\n`;
-        } else if (typeof newValue === 'object') {
+        }
+        if (typeof newValue === 'object') {
           return `${indent.slice(2)}- ${key}: ${oldValue}\n${indent.slice(2)}+ ${key}: ${formatValue(newValue, depth)}\n`;
         }
         return `${indent.slice(2)}- ${key}: ${oldValue}\n${indent.slice(2)}+ ${key}: ${newValue}\n`;
