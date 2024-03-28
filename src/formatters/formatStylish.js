@@ -20,13 +20,12 @@ const formatStylish = (data) => {
     const indent = ' '.repeat(depth * 4);
 
     const formatValue = (value, currentDepth) => {
-      if (typeof value === 'object') {
+      if (typeof value === 'object' && value !== null && value !== undefined) {
         const formattedValue = Object.entries(value).map(([subKey, subValue]) => {
           const formattedSubValue = formatValue(subValue, currentDepth + 1);
           const subIndent = ' '.repeat((currentDepth + 1) * 4);
           return `${subIndent}${subKey}: ${formattedSubValue}`;
         }).join('\n');
-
         return `{\n${formattedValue}\n${' '.repeat(currentDepth * 4)}}`;
       }
       return value;
