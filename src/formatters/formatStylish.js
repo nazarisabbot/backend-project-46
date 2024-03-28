@@ -28,6 +28,10 @@ const formatStylish = (data) => {
         }).join('\n');
         return `{\n${formattedValue}\n${' '.repeat(currentDepth * 4)}}`;
       }
+      // новый код: форматирование объекта в строку
+      if (typeof value === 'object') {
+        return `{\n${Object.entries(value).map(([key, val]) => `  ${key}: ${val}`).join('\n')}\n}`;
+      }
       return value;
     };
     switch (type) {
