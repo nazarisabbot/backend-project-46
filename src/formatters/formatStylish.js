@@ -29,8 +29,8 @@ const formatStylish = (data) => {
         return `{\n${formattedValue}\n${' '.repeat(currentDepth * 4)}}`;
       }
       // новый код: форматирование объекта в строку
-      if (typeof value === 'object') {
-        return `{\n${Object.entries(value).map(([key, val]) => `  ${key}: ${val}`).join('\n')}\n}`;
+      if (value !== null && typeof value === 'object') {
+        return `{\n${Object.entries(value).map(([objKey, objVal]) => `  ${objKey}: ${objVal}`).join('\n')}\n}`;
       }
       return value;
     };
